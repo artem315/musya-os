@@ -1,0 +1,12 @@
+file type = "commands"
+  start
+  stop
+  claude chat
+  chatgpt chat
+  codex chat
+  ram
+  gubby
+  okak
+  musya
+  krasavchuk 
+  load commands from "chat" [https://chatgpt.com/c/6acbcfaf-a410-83ed-826f-3b847742d9a9] type= "https url"
