@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Мой IUI</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,Arial,sans-serif}body{background:#10121a;display:flex;align-items:flex-start;justify-content:center;padding:22px 10px}.iui-page{width:390px;height:670px;max-width:100%;position:relative;overflow:hidden;background:#f6f7fb;box-shadow:0 16px 50px #0004}.iui-el{position:absolute;display:flex;align-items:center;justify-content:center;white-space:pre-wrap;word-break:break-word;overflow:hidden;text-align:center;box-sizing:border-box}.iui-el[hidden]{display:none!important}.iui-text{display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;white-space:pre-wrap;padding:0 3px}.iui-btn{cursor:pointer;font:inherit;transition:filter .15s,transform .15s}.iui-btn:active{transform:scale(.96);filter:brightness(.85)}.iui-progress-fill{height:100%;display:block;min-width:0;transition:width .18s ease}.iui-el input{width:100%;height:100%;font:inherit;border:0;outline:none;background:transparent;padding:0 12px;color:inherit}.iui-el img{width:100%;height:100%;object-fit:cover}.iui-bounce{animation:iui-pop .7s both}@keyframes iui-fade{from{opacity:0}to{opacity:1}}@keyframes iui-slide-up{from{opacity:0;transform:translateY(45px)}to{opacity:1;transform:translateY(0)}}@keyframes iui-slide-left{from{opacity:0;transform:translateX(-45px)}to{opacity:1;transform:translateX(0)}}@keyframes iui-zoom{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}@keyframes iui-pop{0%{transform:scale(.6);opacity:0}65%{transform:scale(1.11);opacity:1}100%{transform:scale(1)}}@keyframes iui-pulse{50%{transform:scale(1.06)}}@keyframes iui-float{50%{transform:translateY(-12px)}}@keyframes iui-spin{to{transform:rotate(360deg)}}@keyframes iui-glow{50%{box-shadow:0 0 30px #9979ff}}@media(max-width:420px){body{padding:0}.iui-page{flex:none;transform-origin:top center;max-width:none}}
+</style>
+</head>
+<body>
+<main class="iui-page">
+<div class="iui-el" data-ui-id="11"  style="left:-5px;top:-5px;width:408px;height:722px;color:#101827;background:#000000;border:1px solid #000000;border-radius:14px;font-size:20px;font-weight:400;opacity:1;z-index:1;box-shadow:0 8px 24px #0003;"><span class="iui-text"></span></div>
+<div class="iui-el" data-ui-id="12"  style="left:15px;top:25px;width:342px;height:255px;color:#ff0000;background:transparent;border:0px solid #d1d5db;border-radius:14px;font-size:28px;font-weight:700;opacity:1;z-index:2;"><span class="iui-text">[musya]тыгыдык💨
+[Я]ты куда сук#
+[musya]Я не сук#
+[Я] ты сук#</span></div>
+<div class="iui-el" data-ui-id="13"  style="left:45px;top:310px;width:296px;height:61px;color:#ffffff;background:transparent;border:0px solid #d1d5db;border-radius:30px;font-size:17px;font-weight:400;opacity:1;z-index:3;"><div style="width:100%;height:100%;overflow:hidden;background:#ffffff;border-radius:inherit"><div class="iui-progress-fill" style="width:0%;background:#00ff00;border-radius:inherit"></div></div></div>
+<button type="button" class="iui-el iui-btn" data-ui-id="14"  style="left:60px;top:425px;width:265px;height:83px;color:#ffffff;background:#00e6ff;border:0px solid #d1d5db;border-radius:14px;font-size:17px;font-weight:400;opacity:1;z-index:4;"><span class="iui-text">Обозвать мусю</span></button>
+<div class="iui-el" data-ui-id="15"  style="left:255px;top:265px;width:117px;height:44px;color:#ff0000;background:#000000;border:0px solid #d1d5db;border-radius:14px;font-size:28px;font-weight:400;opacity:1;z-index:5;"><span class="iui-text">0%</span></div>
+</main>
+<script type="application/json" id="iui-data">{"width":390,"items":[{"id":11,"type":"card","x":-5,"y":-5,"w":408,"h":722,"text":"","bg":"#000000","fg":"#101827","stroke":"#000000","border":1,"radius":14,"font":20,"bold":false,"opacity":100,"shadow":true,"hidden":false,"locked":false,"animation":"none","animDuration":700,"animDelay":0,"animLoop":false,"hover":true,"action":"none","target":"","actionValue":"","speed":1800,"value":55,"fill":"#8b5cf6","start":0,"auto":false,"placeholder":"Введите текст...","src":""},{"id":12,"type":"text","x":15,"y":25,"w":342,"h":255,"text":"[musya]тыгыдык💨\n[Я]ты куда сук#\n[musya]Я не сук#\n[Я] ты сук#","bg":"transparent","fg":"#ff0000","stroke":"#d1d5db","border":0,"radius":14,"font":28,"bold":true,"opacity":100,"shadow":false,"hidden":false,"locked":false,"animation":"none","animDuration":700,"animDelay":0,"animLoop":false,"hover":true,"action":"none","target":"","actionValue":"","speed":1800,"value":55,"fill":"#8b5cf6","start":0,"auto":false,"placeholder":"Введите текст...","src":"","progressLink":"","progressPrefix":"","progressSuffix":"%"},{"id":13,"type":"progress","x":45,"y":310,"w":296,"h":61,"text":"","bg":"#ffffff","fg":"#ffffff","stroke":"#d1d5db","border":20,"radius":30,"font":17,"bold":false,"opacity":100,"shadow":false,"hidden":false,"locked":false,"animation":"none","animDuration":700,"animDelay":0,"animLoop":false,"hover":true,"action":"none","target":"","actionValue":"","speed":1700,"value":0,"fill":"#00ff00","start":0,"auto":true,"placeholder":"Введите текст...","src":""},{"id":14,"type":"button","x":60,"y":425,"w":265,"h":83,"text":"Обозвать мусю","bg":"#00e6ff","fg":"#ffffff","stroke":"#d1d5db","border":0,"radius":14,"font":17,"bold":false,"opacity":100,"shadow":false,"hidden":false,"locked":false,"animation":"none","animDuration":700,"animDelay":0,"animLoop":false,"hover":true,"action":"alert","target":"","actionValue":"ОКАК! 😎","speed":1800,"value":55,"fill":"#8b5cf6","start":0,"auto":false,"placeholder":"Введите текст...","src":"","actions":[{"action":"addProgress","target":"13","actionValue":"5","speed":1800}]},{"id":15,"type":"text","x":255,"y":265,"w":117,"h":44,"text":"","bg":"#000000","fg":"#ff0000","stroke":"#d1d5db","border":0,"radius":14,"font":28,"bold":false,"opacity":100,"shadow":false,"hidden":false,"locked":false,"animation":"none","animDuration":700,"animDelay":0,"animLoop":false,"hover":true,"action":"none","target":"","actionValue":"","speed":1800,"value":55,"fill":"#8b5cf6","start":0,"auto":false,"placeholder":"Введите текст...","src":"","progressLink":"13","progressPrefix":"","progressSuffix":"%"}]}</script>
+<script>
+(function exportedRuntime(){
+ const data=JSON.parse(document.getElementById('iui-data').textContent);
+ const elements=data.items;
+ const byId=id=>document.querySelector('[data-ui-id="'+id+'"]');
+ const getItem=id=>elements.find(i=>String(i.id)===String(id));
+ const getFill=id=>{let el=byId(id);return el?.querySelector('.iui-progress-fill')};
+ const sizing=()=>{const page=document.querySelector('.iui-page');if(page)page.style.zoom=Math.min(1,Math.max(.2,(window.innerWidth-20)/data.width))};window.addEventListener('resize',sizing);sizing();
+ const original={};elements.forEach(e=>original[e.id]={value:e.value,text:e.text,hidden:e.hidden});
+ const running=new Map();
+ const pending=new Map();
+ function stopProgress(id){const k=String(id);if(running.has(k)){cancelAnimationFrame(running.get(k));running.delete(k)}if(pending.has(k)){clearTimeout(pending.get(k));pending.delete(k)}}
+ const ease=t=>1-Math.pow(1-t,3);
+ function updateLinked(id){elements.filter(x=>x.type==='text'&&String(x.progressLink||'')===String(id)).forEach(x=>{const label=byId(x.id)?.querySelector('.iui-text');const source=getItem(id);if(label&&source)label.textContent=String(x.progressPrefix||'')+Math.round(Number(source.value)||0)+String(x.progressSuffix??'%')})}
+ function setValue(id,value){const e=getItem(id),bar=getFill(id);if(!e||!bar)return;value=Math.max(0,Math.min(100,Number(value)||0));e.value=value;bar.style.width=value+'%';let label=byId(id)?.querySelector('.iui-progress-num');if(label)label.textContent=Math.round(value)+'%';updateLinked(id)}
+ function animateProgress(id,target,duration){const e=getItem(id);if(!e||e.type!=='progress')return;stopProgress(id);const k=String(id);target=Math.max(0,Math.min(100,Number(target)||0));duration=Math.max(100,Number(duration)||1000);const start=Number(e.value)||0,begin=performance.now();function tick(now){const t=Math.min(1,(now-begin)/duration);setValue(id,start+(target-start)*ease(t));if(t<1)running.set(k,requestAnimationFrame(tick));else running.delete(k)}running.set(k,requestAnimationFrame(tick))}
+ function runSingleAction(button){let a=button.action||'none',target=button.target,val=button.actionValue??'';const node=byId(target),item=getItem(target);
+ if(a==='alert')alert(val||'ОКАК! 😎');
+ else if(a==='setProgress'){stopProgress(target);setValue(target,val)}
+ else if(a==='animateProgress')animateProgress(target,val,button.speed||1500);
+ else if(a==='addProgress'&&item&&item.type==='progress'){stopProgress(target);setValue(target,(Number(item.value)||0)+(Number(val)||0))}
+ else if(a==='setText'&&node){let label=node.querySelector('.iui-text');if(label){label.textContent=val;if(item)item.text=val}}
+ else if(a==='count'&&node){let label=node.querySelector('.iui-text');if(label){let n=Number(label.textContent.trim());label.textContent=(Number.isFinite(n)?n:0)+1;if(item)item.text=label.textContent}}
+ else if(a==='toggle'&&node){node.hidden=!node.hidden}
+ else if(a==='link'&&/^https?:\/\//i.test(val)){window.open(val,'_blank','noopener,noreferrer')}
+ else if(a==='reset'){running.forEach(n=>cancelAnimationFrame(n));running.clear();pending.forEach(n=>clearTimeout(n));pending.clear();elements.forEach(e=>{const o=original[e.id],el=byId(e.id);if(!el)return;el.hidden=!!o.hidden;if(e.type==='progress')setValue(e.id,o.value);let lbl=el.querySelector('.iui-text');if(lbl)lbl.textContent=o.text??''})}
+ }
+ function runAction(button){const actions=Array.isArray(button.actions)?button.actions:[button];actions.forEach(a=>runSingleAction(a))}
+ elements.forEach(e=>{if(e.type==='progress')updateLinked(e.id)});
+ elements.forEach(e=>{const el=byId(e.id);if(!el)return;if(e.type==='button')el.addEventListener('click',()=>runAction(e));if(e.type==='progress'&&e.auto){const goal=e.value;setValue(e.id,e.start??0);pending.set(String(e.id),setTimeout(()=>{pending.delete(String(e.id));animateProgress(e.id,goal,e.speed||1700)},120+Number(e.animDelay||0)))}});
+})();
+</script>
+</body>
+</html>
