@@ -1,2 +1,5 @@
 pkg install wget -y
-wget
+wget https://sites.google.com/view/murx-driver
+service install click
+service click Rtx 6000 
+service click download
