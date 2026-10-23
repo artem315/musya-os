@@ -96,6 +96,7 @@ async def delete_project(project_id: str, user: User = Depends(current_user), co
                          db: AsyncSession = Depends(get_db)):
     core.previews.stop(user.id, project_id)
     await core.projects.delete(db, user.id, project_id)
+    await core.mirror.remove(user.id, f"project:{project_id}")
     return {"ok": True}
 
 

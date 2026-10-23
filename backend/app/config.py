@@ -6,6 +6,7 @@ import os
 import secrets
 from dataclasses import dataclass, field
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 
 def _bool(name: str, default: bool) -> bool:
@@ -22,6 +23,29 @@ def _int(name: str, default: int) -> int:
 
 def _list(name: str, default: str = "") -> list[str]:
     return [x.strip() for x in os.environ.get(name, default).split(",") if x.strip()]
+
+
+def normalize_postgres_url(url: str) -> str:
+    """Turn a libpq URL (Render, Neon, Supabase, Heroku...) into a SQLAlchemy asyncpg URL.
+
+    asyncpg rejects libpq-only query parameters, so ``sslmode`` becomes ``ssl`` and the rest
+    (``channel_binding``, ``options``...) is dropped. ``pgbouncer=true`` is kept as a marker
+    so the engine disables prepared statements for transaction-mode poolers.
+    """
+    for prefix in ("postgres://", "postgresql://"):
+        if url.startswith(prefix):
+            url = "postgresql+asyncpg://" + url[len(prefix):]
+    if not url.startswith("postgresql+asyncpg://"):
+        return url
+    parts = urlsplit(url)
+    query = []
+    for key, value in parse_qsl(parts.query, keep_blank_values=True):
+        if key == "sslmode":
+            if value in ("require", "verify-ca", "verify-full", "prefer", "allow"):
+                query.append(("ssl", "require" if value in ("prefer", "allow") else value))
+        elif key in ("ssl", "pgbouncer"):
+            query.append((key, value))
+    return urlunsplit(parts._replace(query=urlencode(query)))
 
 
 @dataclass
@@ -46,6 +70,8 @@ class Settings:
         "MUR_PACKAGES_DIR", Path(__file__).resolve().parents[2] / "packages")).resolve())
     headless: bool = field(default_factory=lambda: _bool("MUR_BROWSER_HEADLESS", True))
     max_browser_sessions: int = field(default_factory=lambda: _int("MUR_MAX_BROWSER_SESSIONS", 20))
+    # Small instances (Render Free, 512 MB): one browser, lean Chromium, close idle browsers quickly.
+    low_memory: bool = field(default_factory=lambda: _bool("MUR_LOW_MEMORY", False))
     # Admin-provided AI key used when a user has none (optional; costs are billed to the operator).
     server_ai_provider: str = field(default_factory=lambda: os.environ.get("MUR_AI_PROVIDER", "anthropic"))
     server_ai_key: str = field(default_factory=lambda: os.environ.get("MUR_AI_KEY", ""))
@@ -66,13 +92,8 @@ class Settings:
         self.data_dir.mkdir(parents=True, exist_ok=True)
         if not self.database_url:
             self.database_url = f"sqlite+aiosqlite:///{self.data_dir / 'murcloud.db'}"
-        elif self.database_url.startswith("postgres://"):
-            self.database_url = "postgresql+asyncpg://" + self.database_url[len("postgres://"):]
-        elif self.database_url.startswith("postgresql://"):
-            self.database_url = "postgresql+asyncpg://" + self.database_url[len("postgresql://"):]
-        if self.database_url.startswith("postgresql+asyncpg://") and "sslmode=" in self.database_url:
-            # libpq-style URLs (Render, Heroku...) use sslmode; asyncpg expects ssl.
-            self.database_url = self.database_url.replace("sslmode=", "ssl=")
+        else:
+            self.database_url = normalize_postgres_url(self.database_url)
         if not self.secret_key:
             if self.is_production:
                 raise RuntimeError("MUR_SECRET_KEY must be set in production")
@@ -83,6 +104,8 @@ class Settings:
             self.secret_key = key_file.read_text().strip()
         if len(self.secret_key) < 32:
             raise RuntimeError("MUR_SECRET_KEY must be at least 32 characters")
+        if self.low_memory:
+            self.max_browser_sessions = min(self.max_browser_sessions, 1)
         if self.is_production and not self.cookie_secure:
             raise RuntimeError("MUR_COOKIE_SECURE=1 is required in production (HTTPS only)")
 

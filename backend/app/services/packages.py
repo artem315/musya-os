@@ -114,6 +114,7 @@ class Packages:
             raise HTTPException(404, "package is not installed")
         await db.delete(row)
         shutil.rmtree(self.install_dir(user_id, package_id), ignore_errors=True)
+        await self.core.mirror.remove(user_id, f"package:{package_id}")
         db.add(AuditLog(user_id=user_id, actor="user", event="package_removed", tool=package_id))
 
     async def get_installed(self, db: AsyncSession, user_id: str, package_id: str) -> InstalledPackage:
