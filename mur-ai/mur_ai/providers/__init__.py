@@ -14,16 +14,20 @@ PROVIDERS = {
 }
 
 
-def available_providers() -> dict:
+def _scripted_allowed(flag: bool | None) -> bool:
+    return flag if flag is not None else os.environ.get("MUR_AI_ALLOW_SCRIPTED") == "1"
+
+
+def available_providers(allow_scripted: bool | None = None) -> dict:
     out = dict(PROVIDERS)
-    if os.environ.get("MUR_AI_ALLOW_SCRIPTED") == "1":
+    if _scripted_allowed(allow_scripted):
         out["scripted"] = {"label": "Test double (scripted, not an AI)", "default_model": "scripted-test-double",
                            "models": []}
     return out
 
 
 def make_provider(name: str, api_key: str | None, model: str | None = None, *, base_url: str | None = None,
-                  effort: str = "high") -> Provider:
+                  effort: str = "high", allow_scripted: bool | None = None) -> Provider:
     if name == "anthropic":
         from .anthropic_provider import AnthropicProvider
         if not api_key:
@@ -39,7 +43,7 @@ def make_provider(name: str, api_key: str | None, model: str | None = None, *, b
         if not api_key:
             raise ProviderError("no OpenRouter API key configured (MUR Settings → AI)")
         return OpenRouterProvider(api_key, model)
-    if name == "scripted" and os.environ.get("MUR_AI_ALLOW_SCRIPTED") == "1":
+    if name == "scripted" and _scripted_allowed(allow_scripted):
         from .scripted import ScriptedProvider
         from .demo_script import demo_site_turns
         return ScriptedProvider(demo_site_turns)

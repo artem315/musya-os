@@ -1,0 +1,10 @@
+name: Musya Hello
+id: musya-hello
+version: 1.0.0
+runtime: musya
+entry: main.mysya
+type: app
+description: Tour of the MUSYA language - variables, functions, events, exceptions, async.
+author: ARTYONIX STUDIOS
+permissions:
+  - events.emit

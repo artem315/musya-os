@@ -1,0 +1,13 @@
+name: MUR Browser
+id: mur-browser
+version: 1.0.0
+runtime: musya
+entry: main.mysya
+type: driver
+description: Opens example.com, waits for it, takes a screenshot and follows the first link.
+author: ARTYONIX STUDIOS
+permissions:
+  - browser.read
+  - browser.navigate
+  - browser.click
+  - browser.screenshot

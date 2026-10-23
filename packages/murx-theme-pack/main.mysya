@@ -1,0 +1,8 @@
+# Writes the theme presets into the package folder (MUR RTX Lab reads the same presets built in).
+app "MURX Theme Pack"
+let themes = {
+    "MURX 10 000": {"bloom": 1.4, "palette": ["#a855f7", "#22d3ee"], "note": "fantasy preset"},
+    "ULTRA GALAXY SOUP LSS": {"bloom": 2.0, "palette": ["#f97316", "#ec4899"], "note": "fantasy preset"}
+}
+file.write("themes.json", json.stringify(themes, 2))
+print "Темы записаны в themes.json (это визуальные пресеты, а не драйверы видеокарт)."

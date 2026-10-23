@@ -1,0 +1,12 @@
+name: MURX 10000 Theme Pack
+id: murx-theme-pack
+version: 10.0.0
+runtime: musya
+entry: main.mysya
+type: service
+description: >
+  Fantasy visual themes "MURX 10 000" and "ULTRA GALAXY SOUP LSS" for MUR RTX Lab.
+  These are fictional names for render presets - NOT real graphics cards or GPU drivers.
+author: ARTYONIX STUDIOS
+permissions:
+  - files.write

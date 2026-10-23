@@ -1,0 +1,17 @@
+# MURX Click driver - demo run: opens a page and clicks a link by its text.
+app "MURX Click"
+
+func click_text(label):
+    if service.exists(label):
+        service screenshot "before-click"
+        service click label
+        service screenshot "after-click"
+        return true
+    end
+    print "Кнопка не найдена:", label
+    return false
+end
+
+service load "https://example.com"
+print "clicked:", click_text("Learn more")
+print "now at:", service.url()

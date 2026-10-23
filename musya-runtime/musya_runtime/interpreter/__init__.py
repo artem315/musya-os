@@ -160,6 +160,30 @@ class Interpreter:
                     results.append(TestResult(decl.name, False, exc.to_dict()))
         return RunResult(self.app_name, value, self.steps, results)
 
+    async def run_repl(self, source: str, source_name: str = "<terminal>") -> Any:
+        """Execute ``source`` in a persistent environment (MUR Terminal / Service Studio console).
+
+        Variables and functions defined by earlier calls stay available. Returns the
+        value of the last statement (so ``service status`` prints its result).
+        """
+        program = parse(source, source_name)
+        if not hasattr(self, "repl_env"):
+            self.repl_env = Environment(self.globals)
+        self.steps = 0  # each terminal line gets a fresh step budget
+        try:
+            value = await self.exec_block(program.body, self.repl_env, source_name)
+            await self.drain_events(source_name)
+            await self.join_tasks()
+        except RecursionError:
+            self.cancel_tasks()
+            raise MusyaLimitError("call stack exhausted", source_name=source_name) from None
+        except BaseException:
+            self.cancel_tasks()
+            raise
+        last = program.body[-1] if program.body else None
+        is_expr = isinstance(last, A.ExprStmt)
+        return value if is_expr else None
+
     def deliver_event(self, name: str, data: Any = None) -> None:
         """Called by the host when an engine event happens (e.g. page_loaded)."""
         if name in self.handlers or "*" in self.handlers:
