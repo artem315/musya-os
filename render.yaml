@@ -4,6 +4,7 @@ services:
   - type: web
     name: murcloud
     runtime: docker
+    region: frankfurt         # must match the database region
     dockerfilePath: ./Dockerfile
     plan: standard            # Chromium needs >= 2 GB RAM
     healthCheckPath: /api/health
@@ -35,4 +36,5 @@ databases:
   - name: murcloud-db
     databaseName: murcloud
     user: murcloud
+    region: frankfurt
     plan: basic-256mb

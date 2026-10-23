@@ -27,11 +27,13 @@ COPY examples/ /app/examples/
 COPY --from=web /src/frontend/dist /app/frontend/dist
 
 RUN useradd -m -u 10001 murcloud && mkdir -p /data && chown murcloud:murcloud /data
-USER murcloud
+COPY deploy/entrypoint.sh /usr/local/bin/murcloud-entrypoint
 WORKDIR /app/backend
 
 ENV MUR_DATA_DIR=/data MUR_FRONTEND_DIST=/app/frontend/dist MUR_PACKAGES_DIR=/app/packages PORT=8000
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s CMD python -c "import urllib.request,os;urllib.request.urlopen(f'http://127.0.0.1:{os.environ[\"PORT\"]}/api/health')"
 # --proxy-headers: trust X-Forwarded-* from the TLS-terminating reverse proxy in front (Caddy / Render).
+# Starts as root only to fix ownership of a mounted /data disk, then runs as uid 10001.
+ENTRYPOINT ["/usr/local/bin/murcloud-entrypoint"]
 CMD ["sh", "-c", "exec uvicorn --factory app.main:get_app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips=${FORWARDED_ALLOW_IPS:-127.0.0.1} --ws-max-size 16777216"]
