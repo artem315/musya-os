@@ -1,0 +1,15 @@
+# MUR Browser demo - opens a real page with the Service Engine
+app "Musya Browser"
+
+let url = "https://example.com"
+
+service load url
+service wait "Example Domain"
+service screenshot
+
+if service.exists("More information"):
+    service click "More information"
+end
+
+print "Сейчас открыто:", service.url()
+print "МУРГОТОВО!"

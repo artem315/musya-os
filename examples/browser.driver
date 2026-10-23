@@ -1,0 +1,10 @@
+name: MUR Browser
+version: 1.0.0
+runtime: musya
+entry: browser.mysya
+type: driver
+permissions:
+  - browser.read
+  - browser.navigate
+  - browser.click
+  - browser.screenshot
