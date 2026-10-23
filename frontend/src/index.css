@@ -1,0 +1,230 @@
+@import "tailwindcss";
+
+@theme {
+  --radius-mur: 20px;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+:root,
+[data-theme="neon"] {
+  --bg: #07071a;
+  --bg-2: #0e0e2a;
+  --panel: rgba(20, 18, 48, 0.62);
+  --panel-solid: #15143a;
+  --panel-border: rgba(168, 139, 250, 0.28);
+  --text: #eef0ff;
+  --muted: #a3a6c8;
+  --accent: #a855f7;
+  --accent-2: #22d3ee;
+  --danger: #f43f5e;
+  --ok: #34d399;
+  --warn: #fbbf24;
+  --glow: 0 0 24px rgba(168, 85, 247, 0.35);
+  color-scheme: dark;
+}
+
+[data-theme="dark"] {
+  --bg: #0b0d12;
+  --bg-2: #12151d;
+  --panel: rgba(24, 27, 36, 0.78);
+  --panel-solid: #181b24;
+  --panel-border: rgba(255, 255, 255, 0.1);
+  --text: #e8eaf0;
+  --muted: #9aa0ae;
+  --glow: 0 0 0 transparent;
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg: #e9ecf8;
+  --bg-2: #f6f7fc;
+  --panel: rgba(255, 255, 255, 0.72);
+  --panel-solid: #ffffff;
+  --panel-border: rgba(80, 70, 160, 0.18);
+  --text: #191a2e;
+  --muted: #5d607a;
+  --glow: 0 6px 24px rgba(80, 70, 160, 0.15);
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--accent) 45%, transparent) transparent;
+}
+
+@layer components {
+  .glass {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    backdrop-filter: blur(22px) saturate(140%);
+    -webkit-backdrop-filter: blur(22px) saturate(140%);
+    box-shadow: var(--glow), 0 20px 60px rgba(0, 0, 0, 0.35);
+  }
+  /* App windows: nearly opaque so overlapping windows stay readable even without backdrop blur. */
+  .window-surface {
+    background: color-mix(in srgb, var(--panel-solid) 97%, transparent);
+    border: 1px solid var(--panel-border);
+    box-shadow: var(--glow), 0 24px 70px rgba(0, 0, 0, 0.5);
+  }
+  .glass-soft {
+    background: color-mix(in srgb, var(--panel-solid) 55%, transparent);
+    border: 1px solid var(--panel-border);
+  }
+  .rounded-mur {
+    border-radius: var(--radius-mur);
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    background: color-mix(in srgb, var(--panel-solid) 70%, transparent);
+    border: 1px solid var(--panel-border);
+    transition: transform 0.12s, background 0.15s, box-shadow 0.15s, opacity 0.15s;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .btn:hover {
+    background: color-mix(in srgb, var(--accent) 22%, var(--panel-solid));
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+  .btn-primary:hover {
+    filter: brightness(1.1);
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  }
+  .btn-danger {
+    background: color-mix(in srgb, var(--danger) 25%, var(--panel-solid));
+    border-color: color-mix(in srgb, var(--danger) 50%, transparent);
+  }
+  .btn-ghost {
+    background: transparent;
+    border-color: transparent;
+  }
+  .btn-sm {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.78rem;
+    border-radius: 10px;
+  }
+  .input {
+    width: 100%;
+    padding: 0.55rem 0.8rem;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--bg) 60%, transparent);
+    border: 1px solid var(--panel-border);
+    color: var(--text);
+    outline: none;
+    font-size: 0.9rem;
+  }
+  .input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+  .neon-text {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .tab {
+    padding: 0.35rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .tab-active {
+    color: var(--text);
+    background: color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    border: 1px solid var(--panel-border);
+    color: var(--muted);
+  }
+  .muted {
+    color: var(--muted);
+  }
+}
+
+.wallpaper-galaxy {
+  background:
+    radial-gradient(circle at 20% 15%, rgba(168, 85, 247, 0.45), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(34, 211, 238, 0.32), transparent 42%),
+    radial-gradient(circle at 50% 90%, rgba(236, 72, 153, 0.3), transparent 45%),
+    var(--bg);
+}
+.wallpaper-aurora {
+  background: linear-gradient(160deg, #0b1335 0%, #1b0b3a 45%, #04303a 100%);
+}
+.wallpaper-soup {
+  background:
+    radial-gradient(circle at 30% 70%, rgba(249, 115, 22, 0.4), transparent 45%),
+    radial-gradient(circle at 75% 25%, rgba(234, 179, 8, 0.3), transparent 40%),
+    var(--bg);
+}
+.wallpaper-plain {
+  background: var(--bg);
+}
+
+.stars::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(1px 1px at 10% 20%, #fff8, transparent), radial-gradient(1px 1px at 30% 80%, #fff6, transparent),
+    radial-gradient(1.5px 1.5px at 70% 40%, #fff9, transparent), radial-gradient(1px 1px at 90% 70%, #fff5, transparent),
+    radial-gradient(1px 1px at 55% 15%, #fff7, transparent), radial-gradient(1.5px 1.5px at 15% 60%, #fff6, transparent);
+  pointer-events: none;
+}
+
+.cm-editor {
+  height: 100%;
+  font-size: 13.5px;
+}
+.cm-editor.cm-focused {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
