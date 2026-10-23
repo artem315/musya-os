@@ -1,0 +1,52 @@
+# hello.mysya - tour of the MUSYA language (no browser needed)
+app "Hello Musya"
+
+const CAT = "Муся"
+let portions = 0
+
+func cook(soup, times = 1):
+    let i = 0
+    while i < times:
+        portions += 1
+        i += 1
+    end
+    return "${soup} x${times}"
+end
+
+print "Привет, ${CAT}!"
+print cook("Мурсуп", 3), "→ порций:", portions
+
+let menu = ["мурсуп", "рыбка", "сливки"]
+for i, item in menu:
+    print "${i + 1}. ${item.upper()}"
+end
+
+let cat = {"name": CAT, "mood": "мур", "skills": ["тыгыдык", "мурчание"]}
+cat.skills.push("сон")
+print cat.name, "умеет:", cat.skills.join(", ")
+
+on soup_ready(n):
+    print "🍲 событие soup_ready, порций:", n
+end
+emit "soup_ready", portions
+
+try:
+    throw error("кастрюля пуста", "KitchenError")
+catch e:
+    print "Поймали ${e.type}: ${e.message}"
+end
+
+func slow_double(x):
+    sleep(50)
+    return x * 2
+end
+let tasks = [spawn slow_double(1), spawn slow_double(2), spawn slow_double(3)]
+print "async:", await tasks
+
+test "cook counts portions":
+    let before = portions
+    cook("тест", 2)
+    assert portions == before + 2, "portions should grow"
+end
+
+print "МУРГОТОВО!"

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MURCLOUD" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/mur_accent</item>
+        <item name="colorAccent">@color/mur_accent2</item>
+        <item name="android:windowBackground">@color/mur_bg</item>
+        <item name="android:statusBarColor">@color/mur_bg</item>
+        <item name="android:navigationBarColor">@color/mur_bg</item>
+        <item name="android:textColorPrimary">@color/mur_text</item>
+    </style>
+</resources>

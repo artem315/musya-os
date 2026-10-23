@@ -1,0 +1,16 @@
+# MURCLOUD application config
+name: Musya Browser
+version: 1.0.0
+runtime: musya
+entry: browser.mysya
+description: Opens a page, takes a screenshot and follows a link
+author: ARTYONIX STUDIOS
+permissions:
+  - browser.read
+  - browser.navigate
+  - browser.click
+  - browser.screenshot
+tests:
+  - hello.mysya
+env:
+  START_URL: https://example.com

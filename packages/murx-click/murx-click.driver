@@ -1,0 +1,16 @@
+# Installed by `service install murx-click` (see Commands.dat: "service install click")
+name: MURX Click
+id: murx-click
+version: 1.0.0
+runtime: musya
+entry: main.mysya
+type: driver
+description: Helper driver that finds a button by text and clicks it, with a screenshot before and after.
+author: ARTYONIX STUDIOS
+permissions:
+  - browser.read
+  - browser.navigate
+  - browser.click
+  - browser.screenshot
+commands:
+  - click

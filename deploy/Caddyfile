@@ -1,0 +1,8 @@
+# Automatic HTTPS (Let's Encrypt) for MURCLOUD. WebSockets are proxied transparently.
+{$MUR_DOMAIN} {
+	encode zstd gzip
+	request_body {
+		max_size 110MB
+	}
+	reverse_proxy backend:8000
+}

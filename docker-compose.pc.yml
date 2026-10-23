@@ -1,0 +1,19 @@
+# Enables MUR PC. The backend gets the Docker socket (root-equivalent on the host:
+# use a dedicated VPS) and joins the internal network the desktops live on.
+services:
+  backend:
+    environment:
+      MUR_PC_ENABLED: "1"
+      MUR_PC_IMAGE: murcloud/mur-pc:10.0
+      MUR_PC_NETWORK: murcloud-pc
+    user: "10001:${DOCKER_GID:-999}"   # DOCKER_GID: `getent group docker | cut -d: -f3`
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks: [default, murcloud-pc]
+
+networks:
+  murcloud-pc:
+    name: murcloud-pc
+    internal: true
+    labels:
+      murcloud.pc: "1"

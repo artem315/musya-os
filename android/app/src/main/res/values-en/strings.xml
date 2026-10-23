@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="connect_subtitle">Connect to your MURCLOUD server</string>
+    <string name="connect">Connect</string>
+    <string name="connecting">Checking server…</string>
+    <string name="allow_http">Allow HTTP for local development (debug build only)</string>
+    <string name="connect_info">This app connects to a real MURCLOUD backend. The desktop, AI, files and browser all run on the server. An HTTPS server address is required.</string>
+    <string name="offline_title">No connection</string>
+    <string name="offline_text">No internet connection or the MURCLOUD server is unreachable.</string>
+    <string name="retry">Retry</string>
+    <string name="change_server">Change server</string>
+    <string name="err_url">Enter a valid server address.</string>
+    <string name="err_https">An https:// address is required — passwords and keys must not travel unencrypted.</string>
+    <string name="err_not_murcloud">The server at this address is not MURCLOUD (no /api/health).</string>
+    <string name="err_ssl">The server certificate is invalid — connection stopped.</string>
+    <string name="download_started">Download started: %1$s</string>
+</resources>

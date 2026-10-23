@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">MURCLOUD</string>
+    <string name="connect_title" translatable="false">MURCLOUD 10 000 ULTRA</string>
+    <string name="connect_subtitle">Подключение к вашему серверу MURCLOUD</string>
+    <string name="server_hint" translatable="false">https://murcloud.example.com</string>
+    <string name="connect">Подключиться</string>
+    <string name="connecting">Проверяем сервер…</string>
+    <string name="allow_http">Разрешить HTTP для локальной разработки (только debug-сборка)</string>
+    <string name="connect_info">Приложение подключается к настоящему backend MURCLOUD. Весь рабочий стол, ИИ, файлы и браузер работают на сервере. Нужен адрес сервера с HTTPS.</string>
+    <string name="offline_title">Нет связи</string>
+    <string name="offline_text">Нет подключения к интернету или сервер MURCLOUD недоступен.</string>
+    <string name="retry">Повторить</string>
+    <string name="change_server">Сменить сервер</string>
+    <string name="err_url">Введите корректный адрес сервера.</string>
+    <string name="err_https">Нужен адрес с https:// — пароли и ключи нельзя передавать без шифрования.</string>
+    <string name="err_not_murcloud">По этому адресу отвечает не MURCLOUD (нет /api/health).</string>
+    <string name="err_ssl">Сертификат сервера недействителен — соединение остановлено.</string>
+    <string name="download_started">Скачивание начато: %1$s</string>
+    <string name="developer" translatable="false">ARTYONIX STUDIOS · 10.0.0 Beta</string>
+</resources>
