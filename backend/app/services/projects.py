@@ -73,6 +73,11 @@ def project_dict(p: Project) -> dict:
 class Projects:
     def __init__(self, settings):
         self.settings = settings
+        self.on_change = None  # (user_id, project_id) -> None; set by Core to persist folders
+
+    def _changed(self, user_id: str, project_id: str) -> None:
+        if self.on_change is not None:
+            self.on_change(user_id, project_id)
 
     def root(self, user_id: str, project_id: str) -> Path:
         d = self.settings.user_dir(user_id) / "projects" / project_id
@@ -112,6 +117,7 @@ class Projects:
         safe = re.sub(r"[\"\\$`]", "", name)
         for rel, content in TEMPLATES[template].items():
             (root / rel).write_text(content.replace("${name}", safe), encoding="utf-8")
+        self._changed(user_id, project.id)
         return project
 
     async def delete(self, db: AsyncSession, user_id: str, project_id: str) -> None:
@@ -161,6 +167,7 @@ class Projects:
             raise HTTPException(400, "project file limit reached")
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_bytes(data)
+        self._changed(user_id, project_id)
         return {"path": rel, "size": len(data), "mtime": p.stat().st_mtime, "diagnostics": self.diagnose(p, content, root)}
 
     @staticmethod
@@ -181,6 +188,7 @@ class Projects:
 
     def mkdir(self, user_id: str, project_id: str, rel: str) -> None:
         self.path(user_id, project_id, rel).mkdir(parents=True, exist_ok=True)
+        self._changed(user_id, project_id)
 
     def remove(self, user_id: str, project_id: str, rel: str) -> None:
         p = self.path(user_id, project_id, rel)
@@ -192,6 +200,7 @@ class Projects:
             p.unlink()
         else:
             raise HTTPException(404, f"'{rel}' not found")
+        self._changed(user_id, project_id)
 
     def rename(self, user_id: str, project_id: str, rel: str, new_rel: str) -> None:
         src, dst = self.path(user_id, project_id, rel), self.path(user_id, project_id, new_rel)
@@ -201,6 +210,7 @@ class Projects:
             raise HTTPException(409, f"'{new_rel}' already exists")
         dst.parent.mkdir(parents=True, exist_ok=True)
         src.rename(dst)
+        self._changed(user_id, project_id)
 
     def build(self, user_id: str, project_id: str) -> dict:
         """Static checks: every .mysya parses, every manifest validates."""

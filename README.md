@@ -83,12 +83,23 @@ DOCKER_GID=$(getent group docker | cut -d: -f3) docker compose -f docker-compose
 `MUR_SECRET_KEY` генерируется. Нужен план ≥ 2 ГБ RAM (Chromium). MUR PC на Render
 недоступен (нет Docker) — приложение честно об этом сообщает; используйте VPS.
 
+**Render Free (бесплатно, без диска)** — `render-free.yaml` (New → Blueprint → Blueprint Path
+`render-free.yaml`) или вручную с переменными `MUR_STORAGE=database`, `MUR_LOW_MEMORY=1`,
+`MUR_ENV=production`, `MUR_COOKIE_SECURE=1`, `MUR_SECRET_KEY` (Generate), `DATABASE_URL`.
+На бесплатном плане нет диска и файловая система стирается при каждом засыпании, поэтому
+всё постоянное хранится в PostgreSQL: аккаунты, диалоги ИИ, файлы MUR Drive и копии проектов
+Studio и пакетов (восстанавливаются при старте). Нужна бесплатная база, которая не истекает,
+например [Neon](https://neon.tech) — вставьте её строку подключения в `DATABASE_URL`
+(`sslmode`/`channel_binding` поддерживаются). Ограничения Free: 512 МБ памяти (один браузер
+Service Engine), засыпание после 15 минут без запросов и ~1 минута на пробуждение,
+файлы до 20 МБ, 300 МБ на пользователя (бесплатная база Neon — 0.5 ГБ).
+
 **Android** — `cd android && ./gradlew assembleDebug` → `app/build/outputs/apk/debug/app-debug.apk`.
 GitHub Actions собирает APK на каждый push; тег `v*` создаёт релиз с APK, архивом исходников
 и образами в GHCR (подпись — из секретов `MUR_KEYSTORE_*`).
 
 Основные переменные: `MUR_ENV=production`, `MUR_SECRET_KEY` (≥32 символов), `DATABASE_URL`,
-`MUR_COOKIE_SECURE=1`, `MUR_DATA_DIR`, `MUR_STORAGE=local|s3` (+ `MUR_S3_*`, `AWS_*`),
+`MUR_COOKIE_SECURE=1`, `MUR_DATA_DIR`, `MUR_STORAGE=local|s3|database` (+ `MUR_S3_*`, `AWS_*`), `MUR_LOW_MEMORY`,
 `MUR_REGISTRATION_OPEN`, `MUR_AI_PROVIDER/KEY/MODEL`, `MUR_PC_ENABLED`, `MUR_MAX_UPLOAD_MB`,
 `MUR_USER_QUOTA_MB`, `MUR_RATE_LIMIT`. Полный список — `backend/app/config.py`, `.env.example`.
 
@@ -124,7 +135,7 @@ GitHub Actions собирает APK на каждый push; тег `v*` созд
   сетевую изоляцию (см. [docs/SECURITY.md](docs/SECURITY.md)).
 * Терминал — MUSYA REPL, а не системный shell (shell есть только внутри MUR PC).
 * MUR Gaming содержит только 3 браузерные игры + SGT Puzzles внутри MUR PC; AAA-игры не поддерживаются.
-* Проекты Studio хранятся на постоянном диске (`MUR_DATA_DIR`); S3 используется для MUR Drive.
+* Проекты Studio хранятся на постоянном диске (`MUR_DATA_DIR`); без диска (Render Free) — копией в PostgreSQL (`MUR_STORAGE=database`, файлы до 5 МБ, до 50 МБ на проект).
 
 ## Структура
 
@@ -142,7 +153,7 @@ musya-os/
 ├── e2e/                   браузерные e2e-тесты критериев готовности
 ├── docs/                  MUSYA.md, API.md, SECURITY.md
 ├── deploy/Caddyfile
-├── Dockerfile · docker-compose.yml · docker-compose.pc.yml · render.yaml · .env.example
+├── Dockerfile · docker-compose.yml · docker-compose.pc.yml · render.yaml · render-free.yaml · .env.example
 └── .github/workflows/     ci.yml, release.yml
 ```
 

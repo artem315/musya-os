@@ -217,6 +217,7 @@ class AIService:
             self.core.engine.bus.publish(conv.owner, "ai.error", conversation=conv.id,
                                          item={"type": "error", "text": str(exc)[:500]})
         finally:
+            self.core.mirror.mark_project(conv.owner, conv.project_id)
             self.running.pop(conv.id, None)
             self._owner_of.pop(conv.id, None)
             async with self.core.db.sessionmaker() as db:

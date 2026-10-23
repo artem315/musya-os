@@ -1,4 +1,7 @@
-"""Blob storage for MUR Drive: local disk (persistent volume) or S3-compatible object storage.
+"""Blob storage for MUR Drive: local disk, S3-compatible object storage, or the database.
+
+``database`` is for hosts without a persistent disk (e.g. Render Free): file bytes are
+stored in PostgreSQL in 512 KiB chunks, so one free database keeps everything.
 
 Metadata (names, folders, sizes) lives in the database; this layer only
 stores bytes under opaque keys ``<user_id>/<item_id>``.
@@ -107,7 +110,59 @@ class S3Storage(Storage):
         await asyncio.to_thread(self.client.delete_object, Bucket=self.bucket, Key=self._key(key))
 
 
-def make_storage(settings) -> Storage:
+class DatabaseStorage(Storage):
+    CHUNK = 512 * 1024
+
+    def __init__(self, db):
+        self.db = db  # app.db.Database
+
+    async def put_file(self, key: str, src: Path) -> None:
+        from sqlalchemy import delete
+
+        from .db import BlobChunk
+        async with self.db.sessionmaker() as session:
+            await session.execute(delete(BlobChunk).where(BlobChunk.key == key))
+            with open(src, "rb") as fh:
+                seq = 0
+                while data := await asyncio.to_thread(fh.read, self.CHUNK):
+                    session.add(BlobChunk(key=key, seq=seq, data=data))
+                    seq += 1
+                    if seq % 16 == 0:
+                        await session.flush()
+                if seq == 0:
+                    session.add(BlobChunk(key=key, seq=0, data=b""))  # empty file still exists
+            await session.commit()
+
+    async def open_stream(self, key: str, chunk: int = 256 * 1024) -> AsyncIterator[bytes]:
+        from sqlalchemy import select
+
+        from .db import BlobChunk
+        seq = 0
+        while True:  # one chunk per query keeps memory flat for large files
+            async with self.db.sessionmaker() as session:
+                data = (await session.execute(select(BlobChunk.data).where(
+                    BlobChunk.key == key, BlobChunk.seq == seq))).scalar_one_or_none()
+            if data is None:
+                if seq == 0:
+                    raise FileNotFoundError(key)
+                return
+            yield bytes(data)
+            seq += 1
+
+    async def delete(self, key: str) -> None:
+        from sqlalchemy import delete
+
+        from .db import BlobChunk
+        async with self.db.sessionmaker() as session:
+            await session.execute(delete(BlobChunk).where(BlobChunk.key == key))
+            await session.commit()
+
+
+def make_storage(settings, db=None) -> Storage:
     if settings.storage_backend == "s3":
         return S3Storage(settings.s3_bucket, settings.s3_endpoint, settings.s3_region)
+    if settings.storage_backend == "database":
+        if db is None:
+            raise RuntimeError("MUR_STORAGE=database needs the database")
+        return DatabaseStorage(db)
     return LocalStorage(settings.data_dir / "blobs")

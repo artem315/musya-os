@@ -80,7 +80,9 @@ async def terminal(body: LineBody, user: User = Depends(current_user), core: Cor
     await core.projects.get(db, user.id, body.project_id)
     root = core.projects.root(user.id, body.project_id)
     db.add(AuditLog(user_id=user.id, actor="user", event="terminal", detail={"line": body.line[:500]}))
-    return await core.runner.terminal(user.id, body.project_id, root, body.line)
+    result = await core.runner.terminal(user.id, body.project_id, root, body.line)
+    core.mirror.mark_project(user.id, body.project_id)  # file.write from the REPL changes the project
+    return result
 
 
 @router.get("/jobs")

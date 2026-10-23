@@ -1,0 +1,37 @@
+# Render Blueprint for the FREE plan (no persistent disk, 512 MB RAM, sleeps after 15 min idle).
+# Everything persistent lives in an external free PostgreSQL (e.g. Neon) via MUR_STORAGE=database:
+# accounts, AI chats, MUR Drive files, and mirrors of Studio projects / packages restored at startup.
+# Use: New -> Blueprint -> Blueprint Path: render-free.yaml
+services:
+  - type: web
+    name: murcloud
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: MUR_ENV
+        value: production
+      - key: MUR_COOKIE_SECURE
+        value: "1"
+      - key: MUR_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false            # paste the connection string of your free Postgres (Neon, Supabase...)
+      - key: MUR_STORAGE
+        value: database
+      - key: MUR_LOW_MEMORY
+        value: "1"
+      - key: MUR_MAX_UPLOAD_MB
+        value: "20"
+      - key: MUR_USER_QUOTA_MB
+        value: "300"
+      - key: FORWARDED_ALLOW_IPS
+        value: "*"
+      - key: MUR_REGISTRATION_OPEN
+        value: "1"
+      - key: MUR_PC_ENABLED
+        value: "0"
+      - key: MUR_AI_KEY
+        sync: false

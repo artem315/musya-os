@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import time
 import uuid
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
-from sqlalchemy import (JSON, BigInteger, Boolean, Float, ForeignKey, Index, Integer, String, Text, UniqueConstraint)
+from sqlalchemy import (JSON, BigInteger, Boolean, Float, ForeignKey, Index, Integer, LargeBinary, String, Text,
+                        UniqueConstraint)
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -147,13 +149,43 @@ class AppState(Base):
     updated_at: Mapped[float] = mapped_column(Float, default=now)
 
 
+class BlobChunk(Base):
+    """MUR Drive file contents when MUR_STORAGE=database (hosts without a persistent disk)."""
+    __tablename__ = "blob_chunks"
+    key: Mapped[str] = mapped_column(String(200), primary_key=True)
+    seq: Mapped[int] = mapped_column(Integer, primary_key=True)
+    data: Mapped[bytes] = mapped_column(LargeBinary)
+
+
+class StoredFile(Base):
+    """Mirror of a project/package folder when MUR_STORAGE=database; restored at startup."""
+    __tablename__ = "stored_files"
+    __table_args__ = (UniqueConstraint("user_id", "scope", "path"), Index("ix_stored_scope", "user_id", "scope"))
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[str] = mapped_column(String(32))
+    scope: Mapped[str] = mapped_column(String(80))  # "project:<id>" | "package:<id>"
+    path: Mapped[str] = mapped_column(String(1024))
+    sha256: Mapped[str] = mapped_column(String(64))
+    size: Mapped[int] = mapped_column(Integer)
+    data: Mapped[bytes] = mapped_column(LargeBinary)
+    updated_at: Mapped[float] = mapped_column(Float, default=now)
+
+
 class Database:
     def __init__(self, url: str):
-        kwargs = {}
+        kwargs: dict = {}
         if url.startswith("sqlite"):
             kwargs["connect_args"] = {"timeout": 30}
         else:
-            kwargs.update(pool_size=10, max_overflow=20, pool_pre_ping=True)
+            # Small pool: free Postgres tiers allow only a few dozen connections.
+            kwargs.update(pool_size=5, max_overflow=10, pool_pre_ping=True, pool_recycle=300)
+            parts = urlsplit(url)
+            query = dict(parse_qsl(parts.query))
+            if query.pop("pgbouncer", None) == "true" or "pooler" in (parts.hostname or ""):
+                # Transaction-mode poolers (Supabase, Neon "-pooler") cannot keep prepared statements.
+                kwargs["connect_args"] = {"statement_cache_size": 0, "prepared_statement_cache_size": 0,
+                                          "prepared_statement_name_func": lambda: f"__mur_{uuid.uuid4().hex}__"}
+                url = urlunsplit(parts._replace(query=urlencode(query)))
         self.engine = create_async_engine(url, **kwargs)
         self.sessionmaker = async_sessionmaker(self.engine, expire_on_commit=False, class_=AsyncSession)
 
