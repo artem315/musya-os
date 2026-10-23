@@ -244,7 +244,6 @@ def test_ai_keys_are_encrypted_and_hidden(client, musya):
     assert r["hint"] == "…abcd"
     provs = client.get("/api/ai/providers").json()
     assert provs["keys"][0]["hint"] == "…abcd" and "api_key" not in str(provs["keys"])
-    import asyncio
     from app.db import ApiKey
     from sqlalchemy import select
     core = client.app.state.core

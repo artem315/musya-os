@@ -26,7 +26,9 @@ def page():
     SHOTS.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as pw:
         browser = pw.chromium.launch(executable_path=CHROMIUM)
-        ctx = browser.new_context(viewport={"width": 1440, "height": 900}, locale="ru-RU")
+        # MUR_E2E_IGNORE_TLS=1 only for a local Caddy test CA (https://localhost).
+        ctx = browser.new_context(viewport={"width": 1440, "height": 900}, locale="ru-RU",
+                                  ignore_https_errors=os.environ.get("MUR_E2E_IGNORE_TLS") == "1")
         p = ctx.new_page()
         p.set_default_timeout(20_000)
         yield p

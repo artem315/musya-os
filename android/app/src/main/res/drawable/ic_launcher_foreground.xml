@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MURCLOUD cat-cloud logo (108dp adaptive icon foreground, safe zone 66dp). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#A855F7"
+        android:pathData="M37,70c-6.6,0 -12,-5.4 -12,-12c0,-5.9 4.3,-10.8 10,-11.8c1.7,-9 9.5,-15.7 19,-15.7c7.4,0 13.8,4.1 17.1,10.3c1.2,-0.3 2.5,-0.5 3.9,-0.5c8.3,0 15,6.6 15,14.9C90,63.3 83.3,70 75,70z"/>
+    <path android:fillColor="#22D3EE" android:fillAlpha="0.85"
+        android:pathData="M45,70c-4,0 -7,-3 -7,-7s3,-7 7,-7h30c4,0 7,3 7,7s-3,7 -7,7z"/>
+    <path android:strokeColor="#0B0B1A" android:strokeWidth="3.5" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:fillColor="#00000000" android:pathData="M44,50l4,-9l4,7M60,48l4,-7l4,9"/>
+    <path android:fillColor="#0B0B1A" android:pathData="M51,56m-2.6,0a2.6,2.6 0,1 1,5.2 0a2.6,2.6 0,1 1,-5.2 0"/>
+    <path android:fillColor="#0B0B1A" android:pathData="M61,56m-2.6,0a2.6,2.6 0,1 1,5.2 0a2.6,2.6 0,1 1,-5.2 0"/>
+</vector>

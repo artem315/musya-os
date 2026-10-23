@@ -6,7 +6,8 @@ import time
 import pytest
 from fastapi.testclient import TestClient
 
-os.environ.setdefault("MUR_CHROMIUM_PATH", "/opt/pw-browsers/chromium")
+if os.path.exists("/opt/pw-browsers/chromium"):  # preinstalled browser in some sandboxes
+    os.environ.setdefault("MUR_CHROMIUM_PATH", "/opt/pw-browsers/chromium")
 
 SITE = {
     "/": "<html><head><title>Backend Test Site</title></head><body><h1>Hello MURCLOUD</h1>"

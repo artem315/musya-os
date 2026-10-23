@@ -222,6 +222,12 @@ body,
   outline: none;
 }
 
+@media (max-width: 767px) {
+  .window-surface {
+    background: var(--panel-solid);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;

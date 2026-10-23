@@ -183,7 +183,7 @@ export default function SoupApp() {
 
   return (
     <div className="flex h-full min-h-0 flex-col sm:flex-row" data-testid="soup">
-      <div className="relative flex min-h-0 flex-1 flex-col items-center gap-3 overflow-auto p-4">
+      <div className="relative flex min-h-0 flex-1 flex-col items-center gap-3 overflow-auto p-4 [&>*]:shrink-0">
         <div className="flex w-full items-center gap-2 text-sm">
           <span className="chip text-orange-300">🍲 Порций: {p.portions}</span>
           <span className="chip text-yellow-300">🪙 {p.coins}</span>
@@ -277,7 +277,7 @@ export default function SoupApp() {
         </AnimatePresence>
       </div>
 
-      <aside className="w-full shrink-0 border-t p-3 sm:w-60 sm:border-l sm:border-t-0" style={{ borderColor: "var(--panel-border)" }}>
+      <aside className="max-h-[35%] w-full shrink-0 overflow-auto border-t p-3 sm:max-h-none sm:w-60 sm:border-l sm:border-t-0" style={{ borderColor: "var(--panel-border)" }}>
         <div className="mb-2 flex items-center gap-1.5 font-semibold">
           <Award size={16} className="text-amber-300" /> Достижения {p.achievements.length}/{ACHIEVEMENTS.length}
         </div>

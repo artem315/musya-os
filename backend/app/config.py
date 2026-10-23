@@ -70,6 +70,9 @@ class Settings:
             self.database_url = "postgresql+asyncpg://" + self.database_url[len("postgres://"):]
         elif self.database_url.startswith("postgresql://"):
             self.database_url = "postgresql+asyncpg://" + self.database_url[len("postgresql://"):]
+        if self.database_url.startswith("postgresql+asyncpg://") and "sslmode=" in self.database_url:
+            # libpq-style URLs (Render, Heroku...) use sslmode; asyncpg expects ssl.
+            self.database_url = self.database_url.replace("sslmode=", "ssl=")
         if not self.secret_key:
             if self.is_production:
                 raise RuntimeError("MUR_SECRET_KEY must be set in production")

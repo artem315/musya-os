@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Adaptive icons stay in mipmap-anydpi-v26 for compatibility with older aapt2 resource resolution. -->
+    <issue id="ObsoleteSdkInt" severity="ignore" />
+</lint>

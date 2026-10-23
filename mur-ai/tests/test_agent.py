@@ -4,7 +4,6 @@ import asyncio
 import json
 import threading
 import http.server
-from pathlib import Path
 
 import pytest
 
