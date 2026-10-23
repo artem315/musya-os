@@ -107,8 +107,9 @@ async def vnc_proxy(ws: WebSocket, pc_id: str):
     sub = "binary" if "binary" in (ws.headers.get("sec-websocket-protocol") or "") else None
     await ws.accept(subprotocol=sub)
     try:
+        # proxy=None: the container is on an internal network and must never be reached via an HTTP proxy.
         async with websockets.connect(f"ws://{ip}:{port}/websockify", subprotocols=["binary"],
-                                      max_size=None, open_timeout=10) as upstream:
+                                      max_size=None, open_timeout=10, proxy=None) as upstream:
             async def down():
                 async for data in upstream:
                     if isinstance(data, bytes):

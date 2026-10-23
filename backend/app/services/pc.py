@@ -23,7 +23,7 @@ from fastapi import HTTPException
 log = logging.getLogger("murcloud.pc")
 LABEL = "murcloud.pc"
 ALLOWED_APPS = {"terminal": ["xfce4-terminal"], "browser": ["firefox-esr"], "files": ["thunar"],
-                "editor": ["mousepad"], "taskmanager": ["xfce4-taskmanager"], "games": ["sgt-launcher"]}
+                "editor": ["mousepad"], "taskmanager": ["xfce4-taskmanager"], "games": ["/usr/games/mines"]}
 
 
 class PCManager:
@@ -103,8 +103,8 @@ class PCManager:
                         f"{LABEL}.created": str(time.time()), f"{LABEL}.resolution": resolution,
                         f"{LABEL}.secret": self.secretbox.encrypt(password)},
                 network=net.name, mem_limit=self.settings.pc_memory, nano_cpus=int(self.settings.pc_cpus * 1e9),
-                pids_limit=512, cap_drop=["ALL"], cap_add=["CHOWN", "SETUID", "SETGID", "DAC_OVERRIDE", "FOWNER"],
-                security_opt=["no-new-privileges:true"], shm_size="256m", read_only=False,
+                # The image runs as an unprivileged user, so every Linux capability can be dropped.
+                pids_limit=512, cap_drop=["ALL"], security_opt=["no-new-privileges:true"], shm_size="256m", read_only=False,
                 tmpfs={"/tmp": "rw,size=256m"}, restart_policy={"Name": "no"})
             return self._info(c)
 
